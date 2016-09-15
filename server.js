@@ -1,9 +1,13 @@
-var http = require('http');
 var port = Number(process.env.PORT || 3000);
 
-http.createServer((req, res) => {
-    if (req.url !== '/favicon.ico') {
-        res.write("hello everyone");
-        res.end();
-    }
-}).listen(port);
+var net = require('net')
+var server = net.createServer();
+server
+    .on('connection', function(client) {
+        client.setEncoding('utf8');
+        client.name = client.remoteAddress + ':' + client.remotePort;
+        client.on('data', function(data) {
+                client.write("hello socket");
+            })
+    })
+    .listen(port);
