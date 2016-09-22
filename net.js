@@ -10,4 +10,15 @@ server
                 client.write("hello socket");
             })
     })
-    .listen(port);
+    .listen(port,function(){
+        console.log('服务已启动，被监听的地址信息：%j', this.address());
+
+        var http = require('http');
+
+        http.createServer((req, res) => {
+            if (req.url !== '/favicon.ico') {
+                res.write("port:" + port);
+                res.end();
+            }
+        }).listen(port)
+    });
